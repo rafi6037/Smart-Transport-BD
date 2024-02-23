@@ -1,0 +1,66 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+
+<body>
+<div class="container">
+  <div class="background"></div>
+  <div class="foreground">
+    <div class="cont">
+    <div class="form sign-in">
+      <h2>Sign In</h2>
+      <form method="POST" action="{{ url_for('signin') }}">
+        <label>
+          <span>Email Address</span>
+          <input type="email" name="email">
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="password">
+        </label>
+        <button class="submit" type="submit">Sign In</button>
+      </form>
+    </div>
+    <div class="sub-cont">
+      <div class="img">
+        <div class="img-text m-up">
+          <h1>Don't have an account? Please Sign up!</h1>
+        </div>
+        <div class="img-text m-in">
+          <h1>If you already have an account, just sign in.</h1>
+        </div>
+        <div class="img-btn">
+          <span class="m-up">Sign Up</span>
+          <span class="m-in">Sign In</span>
+        </div>
+      </div>
+      <div class="form sign-up">
+        <h2>Sign Up</h2>
+        <form method="POST" action="{{ url_for('signup') }}">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name">
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email">
+          </label>
+          <label>
+            <span>Password</span>
+            <input type="password" name="password">
+          </label>
+          <button type="submit" class="submit">Sign Up Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<script>
+  document.querySelector('.img-btn').addEventListener('click', function(){
+      document.querySelector('.cont').classList.toggle('s-signup')
+  });
+</script>
+</body>
+</html>
