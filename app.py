@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 import pyrebase
+from bus_routes_data import bus_routes_data
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
 firebaseConfig = {
   "apiKey": "AIzaSyBarDOGmEnYYitE5a00Lu2YaikXOfDFPzA",
   "authDomain": "sts-3a963.firebaseapp.com",
@@ -14,11 +14,9 @@ firebaseConfig = {
   "measurementId": "G-YX6NN8EVE6",
   "databaseURL": "https://sts-3a963-default-rtdb.firebaseio.com/"
 }
-
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
-
 # Routes
 @app.route('/')
 def index():
@@ -77,6 +75,30 @@ def signin():
 def signout():
     session.pop('user_id', None)
     return redirect('/public')
+
+# ////////////Route find
+@app.route('/find-route', methods=['POST'])
+def find_route():
+    start_station = request.json.get('startStation', '')
+    end_station = request.json.get('endStation', '')
+
+    routes_found = []
+
+    # Iterate through bus routes to find routes from start to end station
+    for bus, stations in bus_routes_data.items():
+        if start_station in stations and end_station in stations:
+            start_index = stations.index(start_station)
+            end_index = stations.index(end_station)
+            if start_index < end_index:
+                route = stations[start_index:end_index+1]
+                routes_found.append({'busName': bus, 'route': route})
+
+    if routes_found:
+        return jsonify({'success': True, 'routes': routes_found})
+    else:
+        return jsonify({'success': False, 'message': 'No routes found.'})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

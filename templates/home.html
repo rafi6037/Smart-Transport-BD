@@ -1,24 +1,466 @@
 <!DOCTYPE html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-<style>
-h1 {
-  text-align: center;
-  margin-top: 20%;
-  font-family: sans-serif;
-  font-size: 100px;
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Home</title>
+
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <!-- font awesome style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homestyle.css') }}">
+  <!-- responsive style -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/responsive.css') }}">
+</head>
+
+<body>
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="header_bottom">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+              <span>
+                STS
+              </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ">
+                <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#about"> About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#fr">Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#contact">Contact Us</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-6 ">
+            <div class="detail-box">
+              <h1>
+                Smart <br>
+                Transport <br>
+                System
+              </h1>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui harum voluptatem adipisci. Quos molestiae saepe dicta nobis pariatur, tempora iusto, ad possimus soluta hic praesentium mollitia consequatur beatae, aspernatur culpa.
+              </p>
+              <a href="#fr">
+                Find Route
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="img-box">
+              <img src="{{ url_for('static', filename='images/slider-img-removebg-preview.png') }}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end slider section -->
+  </div>
+
+  <!-- about section -->
+
+  <section id="about" class="about_section layout_padding-bottom">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-6">
+          <div class="detail-box">
+            <h2>
+              About us
+            </h2>
+            <p>
+              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomisedThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised
+            </p>
+            <a href="">
+              Read More
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-6">
+          <div class="img-box">
+            <img src="{{ url_for('static', filename='images/about-img.jpg') }}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+
+
+  <!-- professional section -->
+
+  <section id="fr" class="find-route">
+  <h1>Find Your Route</h1>
+  <div class="container">
+    <div class="input-group">
+      <label for="startStation">Starting Station:</label>
+      <input type="text" id="startStation" placeholder="Enter starting station">
+      <div id="startSuggestions" class="suggestions"></div>
+    </div>
+    <div class="input-group">
+      <label for="endStation">End Station:</label>
+      <input type="text" id="endStation" placeholder="Enter end station">
+      <div id="endSuggestions" class="suggestions"></div>
+    </div>
+    <button class="btn" onclick="findRoute()">Find Route</button>
+
+    <div id="routeInfo" class="route-info" style="display: none;">
+      <h2>Route Information:</h2>
+      <div id="routeDetails" class="route-details"></div>
+    </div>
+  </div>
+</section>
+
+  <!-- end professional section -->
+
+  <!-- service section -->
+
+  <section class="service_section layout_padding">
+    <div class="container ">
+      <div class="heading_container heading_center">
+        <h2> Our Team </h2>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-4 mx-auto">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{{ url_for('static', filename='images/rafi.jpg') }}" alt=""/>
+            </div>
+            <div class="detail-box">
+              <h5>
+                Syed Sabbir Ahmed
+              </h5>
+              <p>
+                Front-end and Back-end Developer <br> ahmed15-6037@diu.edu.bd
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 mx-auto">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{{ url_for('static', filename='images/pronob.jpeg') }}" alt=""/>
+            </div>
+            <div class="detail-box">
+              <h5>
+                Syed Sabbir Ahmed
+              </h5>
+              <p>
+                Front-end and Back-end Developer <br> ahmed15-6037@diu.edu.bd
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 mx-auto">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{{ url_for('static', filename='images/dhrubo.jpeg') }}" alt=""/>
+            </div>
+            <div class="detail-box">
+              <h5>
+                Syed Sabbir Ahmed
+              </h5>
+              <p>
+                Front-end and Back-end Developer <br> ahmed15-6037@diu.edu.bd
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- more team members -->
+      </div>
+    </div>
+  </section>
+
+  <!-- end service section -->
+
+   <!-- contact section -->
+
+  <section id="contact" class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Contact Us
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <form action="">
+            <div>
+              <input type="text" placeholder="Name" />
+            </div>
+            <div>
+              <input type="text" placeholder="Phone Number" />
+            </div>
+            <div>
+              <input type="email" placeholder="Email" />
+            </div>
+            <div>
+              <input type="text" class="message-box" placeholder="Message" />
+            </div>
+            <div class="d-flex ">
+              <button>
+                SEND
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div class="map_container">
+            <div class="map">
+              <div id="googleMap" style="width:100%;height:100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end contact section -->
+
+  <!-- info section -->
+  <section class="info_section ">
+    <div class="container">
+      <h4>
+        Get In Touch
+      </h4>
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <div class="info_items">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="">
+                  <div class="item ">
+                    <div class="img-box ">
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      Daffodil International University <br>daffodil Smart City <br> Savar, Dhaka
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="">
+                  <div class="item ">
+                    <div class="img-box ">
+                      <i class="fa fa-phone" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      +08801606145311
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="">
+                  <div class="item ">
+                    <div class="img-box">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      smarttransportsystem@gmail.com
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="social-box">
+      <h4>
+        Follow Us
+      </h4>
+      <div class="box">
+        <a href="">
+          <i class="fa fa-facebook" aria-hidden="true"></i>
+        </a>
+        <a href="">
+          <i class="fa fa-twitter" aria-hidden="true"></i>
+        </a>
+        <a href="">
+          <i class="fa fa-youtube" aria-hidden="true"></i>
+        </a>
+        <a href="">
+          <i class="fa fa-instagram" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- end info_section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayDateYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Smart Transport System</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+  <!-- End Google Map -->
+  <script>
+    // Sample data for demonstration
+    const stations = ['300 Feet', 'Abdullahpur', 'Adabor', 'Agargaon', 'Airport', 'Airport Jashimuddin(Uttara)', 'Amin Bazar', 'Aminbazar', 'Ansar Camp', 'Arambagh', 'Arambagh Kingdom', 'Asad Gate','Asad gate', 'Ashulia', 'Azampur', 'Azimpur', 'Azimpur - Nilkhet', 'Babubazar', 'Badda', 'Badda Link Road', 'Baipayl', 'Baitul Mukarram', 'Bakshi Bazar', 'Baliati', 'Banani', 'Banasree', 'Bangla Motor', 'BanglaMotor', 'Bashabo', 'Bashtola', 'Bashundhara', 'Bashundhara (300 Feet Gate)', 'Bata Signal', 'Beribadh', 'Bhabanipur', 'Bhairab Bazar', 'Bijoy Sarani', 'Birulia', 'Bishwa Road', 'Board Bazar', 'BoardBazar', 'Bosila', 'Bĳoy Sarani', 'Chairman Bari', 'Chandra', 'Chankhar Pul', 'Chashara', 'Chiriyakhana', 'Chittagong Road', 'City College', 'College Gate', 'CollegeGate', 'Dainik Bangla Moor', 'Darussalam', 'Demra Staff Quarter', 'Dhaka', 'Dhamra', 'Dhamrai', 'Dhanmondi 15', 'Dhanmondi 27', 'Dhanmondi 32', 'Dholairpar', 'ECB Square', 'ECBSquare', 'Eden College', 'Fantasy Kingdom', 'Farmgate', 'Fulbaria', 'GPO', 'Gabtoli', 'Gacha', 'Gazipur', 'Gazipur Bypass', 'Gazipur Chourasta', 'Ghatail', 'Ghatar Char', 'Golap Shah Mazar', 'Golapbag Chourasta', 'Gulistan', 'Gulshan 1', 'Gulshan 2', 'Gulshan Link Road', 'Gulshan2', 'Hazaribag', 'Hazipara', 'Hemayetpur', 'High Court', 'House Building', 'Ittefaq Moor Sayedabad', 'Jahangir Gate', 'Jakir Hossen Road', 'Jalkuri', 'Jamuna Future Park', 'Janapath Moor', 'Jarun', 'Jashimuddin', 'Jashimuddin (Uttara)', 'Jashimuddin(Uttara)', 'Jatrabari', 'Jigatola', 'Kachukhet', 'Kadamtali', 'Kakali', 'Kakoli', 'Kakrail', 'Kalabagan', 'Kalampur', 'Kaliakair', 'Kallyanpur', 'Kalshi', 'Kamalapur', 'Kamarpara', 'Kamrangirchar', 'Kanchan Bridge', 'Kanchpur', 'Karwan Bazar', 'Kashimpur', 'Katabon', 'Kawran Bazar', 'KawranBazar', 'Kazipara', 'Kazla', 'Keraniganj', 'Khamar Bari', 'Khamar Bari - Asad Gate - College Gate', 'Khilgaon', 'Khilgaon Flyover', 'KhilgaonFlyover', 'Khilkhet', 'Kolabagan', 'Konabari', 'Kuril', 'Kuril Bishwa Road', 'Kuril BishwaRoad', 'Kuril Bisso Road', 'Kuril Biswa Road', 'Kuril Chourasta', 'Kuril Flyover', 'MES', 'Madhya Badda', 'Madhyapara', 'Malibagg Mor', 'Malibagh', 'Malibagh Moor', 'Malibagh RailGate', 'Malibagh Railgate', 'Manik Nagar', 'Manikganj', 'Manikgonj', 'Matsya Bhaban', 'Matsya Bhaban - High Court', 'Matuail', 'Mazar Road', 'Merul', 'Metro Hall', 'Mill Gate', 'Mirpur 1', 'Mirpur 10', 'Mirpur 11', 'Mirpur 12', 'Mirpur 14', 'Mirpur 2', 'Mirpur Sony Cinema Hall', 'Mitford Ghat', 'Mogbazar', 'Mohakhali', 'Mohammadpur', 'Motijheel', 'Motso Vobon','Motĳheel', 'Mouchak', 'Mugdapara', 'Nabisco', 'Nadda', 'Nandan Park', 'Narayanganj', 'Narshingdi', 'Narshinghapur', 'Narsingdi', 'Natun Bazar', 'Nawabganj', 'Naya Bazar', 'New Market', 'Nila Market', 'Nilkhet', 'Nobinagar', 'Nobinogor', 'Notun Bazar', 'Pallabi', 'Paltan', 'Panthopoth', 'Paturia', 'Police Plaza', 'Postagola', 'Press Club', 'Purobi', 'PurobiPallabi', 'Rajarbag', 'Rajlakshmi', 'Rajlakshmi House Building', 'Rampura Bazar', 'Rampura Bridge', 'Ray Saheb Bazar', 'Rayerbag', 'Rupnagar', 'Sadarghat', 'Sainik Club', 'Salimullah Road', 'Satrasta', 'Savar', 'Sayedabad', 'Science Lab', 'Shahbag', 'Shahjadpur', 'Shanir Akhra', 'Shankar', 'Shantinagar', 'Shayestaganj', 'Shewra', 'Shewrapara', 'Shia Masjid','Shib Bari', 'ShibBari', 'Shibu Market', 'Shishu Mela', 'ShishuMela', 'Shonir Akhra', 'Showari Ghat', 'Shukrabad', 'Shukrabad Kalabagan', 'Shyamoli', 'Sign Board', 'SignBoard', 'Signboard', 'Sonargaon Hotel', 'Sony Cenema Hall', 'Sony Cinema Hall', 'Sony Cinema Hall Mirpur 1', 'Sony Hall', 'Staff Road', 'Star Kabab', 'StarKabab', 'Station Road', 'Sura Bari', 'Tajmahal Road', 'Taltola', 'Talttola', 'Tangail', 'Technical', 'Tongi', 'Uttar Badda', 'UttarBadda', 'Uttara', 'Uttara House Building', 'Vashantek', 'Vulta', 'Wireless', 'Zia Uddyan', 'Zirabo', 'Zirani Bazar'];
+      // Function to populate auto-suggestions
+function populateSuggestions(input, suggestionsContainer) {
+  suggestionsContainer.innerHTML = '';
+  const inputValue = input.value.toLowerCase();
+  const filteredStations = stations.filter(station => station.toLowerCase().startsWith(inputValue));
+  const maxSuggestions = 10; // Maximum number of suggestions to display
+
+  filteredStations.slice(0, maxSuggestions).forEach(station => {
+    const suggestion = document.createElement('div');
+    suggestion.textContent = station;
+    suggestion.classList.add('suggestion');
+    suggestion.addEventListener('click', () => {
+      input.value = station;
+      suggestionsContainer.innerHTML = '';
+    });
+    suggestionsContainer.appendChild(suggestion);
+  });
+
+  // Show scroll if more than maxSuggestions
+  suggestionsContainer.style.overflowY = filteredStations.length > maxSuggestions ? 'scroll' : 'hidden';
+  suggestionsContainer.style.display = filteredStations.length > 0 ? 'block' : 'none';
+
+  // Position the suggestions container under the input field
+  const inputRect = input.getBoundingClientRect();
+  const inputOffset = inputRect.left - input.parentElement.getBoundingClientRect().left;
+  suggestionsContainer.style.top = (inputRect.top + inputRect.height) + 'px';
+  suggestionsContainer.style.center = inputOffset + 'px';
+  suggestionsContainer.style.width = inputRect.width + 'px';
 }
-button{
-    margin-left: 40%;
-}
-</style>
-    </head>
-    <body>
-        <h1>Welcome {{ user_name }}</h1>
-        <form action="/signout" method="post">
-            <button type="submit">Sign Out</button>
-        </form>
-    </body>
+
+
+    // Function to find route
+    function findRoute() {
+      var startStation = document.getElementById('startStation').value;
+      var endStation = document.getElementById('endStation').value;
+
+      fetch('/find-route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ startStation: startStation, endStation: endStation })
+      })
+      .then(response => response.json())
+      .then(data => {
+        var routeInfo = document.getElementById('routeInfo');
+        routeInfo.innerHTML = '';
+
+        if (data.success) {
+          if (data.routes.length > 0) {
+            data.routes.forEach(function(routeObj) {
+              var routeDetails = document.createElement('div');
+              routeDetails.classList.add('route-details');
+              var busName = document.createElement('h3');
+              busName.textContent = "Bus Name: " + routeObj.busName;
+              routeDetails.appendChild(busName);
+
+              var routeList = document.createElement('ul');
+              routeObj.route.forEach(function(station) {
+                var routeItem = document.createElement('li');
+                routeItem.textContent = station;
+                routeList.appendChild(routeItem);
+              });
+              routeDetails.appendChild(routeList);
+              routeInfo.appendChild(routeDetails);
+            });
+            routeInfo.style.display = 'block';
+          } else {
+            var errorMessage = document.createElement('p');
+            errorMessage.textContent = "No routes found.";
+            routeInfo.appendChild(errorMessage);
+            routeInfo.style.display = 'block';
+          }
+        } else {
+          var errorMessage = document.createElement('p');
+          errorMessage.textContent = data.message;
+          routeInfo.appendChild(errorMessage);
+          routeInfo.style.display = 'block';
+        }
+      })
+      .catch(error => {
+        console.error('Error finding route:', error);
+      });
+    }
+
+    // Get input elements and suggestions containers
+  const startInput = document.getElementById('startStation');
+  const startSuggestions = document.getElementById('startSuggestions');
+  const endInput = document.getElementById('endStation');
+  const endSuggestions = document.getElementById('endSuggestions');
+
+  // Event listeners for input fields
+  startInput.addEventListener('input', () => {
+    populateSuggestions(startInput, startSuggestions);
+  });
+
+  endInput.addEventListener('input', () => {
+    populateSuggestions(endInput, endSuggestions);
+  });
+
+  // Close suggestions when clicking outside the input fields
+  document.addEventListener('click', (event) => {
+    if (!event.target.matches('#startStation') && !event.target.matches('#startSuggestions')) {
+      startSuggestions.innerHTML = '';
+    }
+    if (!event.target.matches('#endStation') && !event.target.matches('#endSuggestions')) {
+      endSuggestions.innerHTML = '';
+    }
+    });
+
+  </script>
+</body>
+
 </html>
