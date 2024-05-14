@@ -1,0 +1,282 @@
+<!--<!DOCTYPE html>-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Welcome</title>-->
+<!--<style>-->
+<!--h1 {-->
+<!--  text-align: center;-->
+<!--  margin-top: 20%;-->
+<!--  font-family: sans-serif;-->
+<!--  font-size: 100px;-->
+<!--}-->
+<!--button{-->
+<!--    margin-left: 40%;-->
+<!--}-->
+<!--</style>-->
+<!--    </head>-->
+<!--    <body>-->
+<!--        <h1>Welcome {{ user_name }}</h1>-->
+<!--        <form action="/signout" method="post">-->
+<!--            <button type="submit">Sign Out</button>-->
+<!--        </form>-->
+<!--    </body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Route</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/images/bg1.jpeg');
+  background-size: cover;
+  filter: blur(4px);
+}
+
+        .container {
+          max-width: 600px;
+          margin: 50px auto;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+          text-align: center;
+        }
+
+        .input-group {
+          margin-bottom: 20px;
+          position: relative; /* Make it relative for absolute positioning of suggestions */
+        }
+
+        .input-group label {
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        .input-group input {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+
+        .suggestions {
+          display: none;
+          position: absolute;
+          width: calc(100% - 2px); /* Adjusted width to fit within input field */
+          background-color: #fff;
+          border: 1px solid #000;
+          border-top: none; /* Remove top border to avoid duplication */
+          border-radius: 0 0 5px 5px; /* Rounded corners only at the bottom */
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          z-index: 1;
+        }
+
+        .suggestions ul {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .suggestions li {
+          padding: 10px;
+          cursor: pointer;
+        }
+
+        .suggestions li:hover {
+          background-color: #f0f0f0;
+        }
+
+        .btn {
+          display: block;
+          width: 100%;
+          padding: 10px;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+          background-color: #0056b3;
+        }
+
+        .route-info {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #f9f9f9;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .route-info h2 {
+          margin-bottom: 10px;
+          text-align: center;
+          color: #007bff;
+        }
+
+        .route-info p {
+          margin: 5px 0;
+        }
+
+        .route-details {
+          margin-top: 10px;
+        }
+
+        .route-details h3 {
+          margin-bottom: 5px;
+          color: #555;
+        }
+
+        .route-details ul {
+          padding: 0;
+        }
+
+        .route-details li {
+          margin-bottom: 5px;
+          color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Welcome {{ user_name }}</h1>
+    <div class="input-group">
+        <label for="startStation">Starting Station:</label>
+        <input type="text" id="startStation" placeholder="Enter starting station">
+        <div id="startSuggestions" class="suggestions"></div>
+    </div>
+    <div class="input-group">
+        <label for="endStation">End Station:</label>
+        <input type="text" id="endStation" placeholder="Enter end station">
+        <div id="endSuggestions" class="suggestions"></div>
+    </div>
+    <button class="btn" onclick="findRoute()">Find Route</button>
+
+    <div id="routeInfo" class="route-info" style="display: none;">
+        <h2>Route Information:</h2>
+        <div id="routeDetails" class="route-details"></div>
+    </div>
+</div>
+<script>
+    // Sample data for demonstration
+    const stations = ['300 Feet', 'Abdullahpur', 'Adabor', 'Agargaon', 'Airport', 'Airport Jashimuddin(Uttara)', 'Amin Bazar', 'Aminbazar', 'Ansar Camp', 'Arambagh', 'Arambagh Kingdom', 'Asad Gate','Asad gate', 'Ashulia', 'Azampur', 'Azimpur', 'Azimpur - Nilkhet', 'Babubazar', 'Badda', 'Badda Link Road', 'Baipayl', 'Baitul Mukarram', 'Bakshi Bazar', 'Baliati', 'Banani', 'Banasree', 'Bangla Motor', 'BanglaMotor', 'Bashabo', 'Bashtola', 'Bashundhara', 'Bashundhara (300 Feet Gate)', 'Bata Signal', 'Beribadh', 'Bhabanipur', 'Bhairab Bazar', 'Bijoy Sarani', 'Birulia', 'Bishwa Road', 'Board Bazar', 'BoardBazar', 'Bosila', 'Bĳoy Sarani', 'Chairman Bari', 'Chandra', 'Chankhar Pul', 'Chashara', 'Chiriyakhana', 'Chittagong Road', 'City College', 'College Gate', 'CollegeGate', 'Dainik Bangla Moor', 'Darussalam', 'Demra Staff Quarter', 'Dhaka', 'Dhamra', 'Dhamrai', 'Dhanmondi 15', 'Dhanmondi 27', 'Dhanmondi 32', 'Dholairpar', 'ECB Square', 'ECBSquare', 'Eden College', 'Fantasy Kingdom', 'Farmgate', 'Fulbaria', 'GPO', 'Gabtoli', 'Gacha', 'Gazipur', 'Gazipur Bypass', 'Gazipur Chourasta', 'Ghatail', 'Ghatar Char', 'Golap Shah Mazar', 'Golapbag Chourasta', 'Gulistan', 'Gulshan 1', 'Gulshan 2', 'Gulshan Link Road', 'Gulshan2', 'Hazaribag', 'Hazipara', 'Hemayetpur', 'High Court', 'House Building', 'Ittefaq Moor Sayedabad', 'Jahangir Gate', 'Jakir Hossen Road', 'Jalkuri', 'Jamuna Future Park', 'Janapath Moor', 'Jarun', 'Jashimuddin', 'Jashimuddin (Uttara)', 'Jashimuddin(Uttara)', 'Jatrabari', 'Jigatola', 'Kachukhet', 'Kadamtali', 'Kakali', 'Kakoli', 'Kakrail', 'Kalabagan', 'Kalampur', 'Kaliakair', 'Kallyanpur', 'Kalshi', 'Kamalapur', 'Kamarpara', 'Kamrangirchar', 'Kanchan Bridge', 'Kanchpur', 'Karwan Bazar', 'Kashimpur', 'Katabon', 'Kawran Bazar', 'KawranBazar', 'Kazipara', 'Kazla', 'Keraniganj', 'Khamar Bari', 'Khamar Bari - Asad Gate - College Gate', 'Khilgaon', 'Khilgaon Flyover', 'KhilgaonFlyover', 'Khilkhet', 'Kolabagan', 'Konabari', 'Kuril', 'Kuril Bishwa Road', 'Kuril BishwaRoad', 'Kuril Bisso Road', 'Kuril Biswa Road', 'Kuril Chourasta', 'Kuril Flyover', 'MES', 'Madhya Badda', 'Madhyapara', 'Malibagg Mor', 'Malibagh', 'Malibagh Moor', 'Malibagh RailGate', 'Malibagh Railgate', 'Manik Nagar', 'Manikganj', 'Manikgonj', 'Matsya Bhaban', 'Matsya Bhaban - High Court', 'Matuail', 'Mazar Road', 'Merul', 'Metro Hall', 'Mill Gate', 'Mirpur 1', 'Mirpur 10', 'Mirpur 11', 'Mirpur 12', 'Mirpur 14', 'Mirpur 2', 'Mirpur Sony Cinema Hall', 'Mitford Ghat', 'Mogbazar', 'Mohakhali', 'Mohammadpur', 'Motijheel', 'Motso Vobon','Motĳheel', 'Mouchak', 'Mugdapara', 'Nabisco', 'Nadda', 'Nandan Park', 'Narayanganj', 'Narshingdi', 'Narshinghapur', 'Narsingdi', 'Natun Bazar', 'Nawabganj', 'Naya Bazar', 'New Market', 'Nila Market', 'Nilkhet', 'Nobinagar', 'Nobinogor', 'Notun Bazar', 'Pallabi', 'Paltan', 'Panthopoth', 'Paturia', 'Police Plaza', 'Postagola', 'Press Club', 'Purobi', 'PurobiPallabi', 'Rajarbag', 'Rajlakshmi', 'Rajlakshmi House Building', 'Rampura Bazar', 'Rampura Bridge', 'Ray Saheb Bazar', 'Rayerbag', 'Rupnagar', 'Sadarghat', 'Sainik Club', 'Salimullah Road', 'Satrasta', 'Savar', 'Sayedabad', 'Science Lab', 'Shahbag', 'Shahjadpur', 'Shanir Akhra', 'Shankar', 'Shantinagar', 'Shayestaganj', 'Shewra', 'Shewrapara', 'Shia Masjid','Shib Bari', 'ShibBari', 'Shibu Market', 'Shishu Mela', 'ShishuMela', 'Shonir Akhra', 'Showari Ghat', 'Shukrabad', 'Shukrabad Kalabagan', 'Shyamoli', 'Sign Board', 'SignBoard', 'Signboard', 'Sonargaon Hotel', 'Sony Cenema Hall', 'Sony Cinema Hall', 'Sony Cinema Hall Mirpur 1', 'Sony Hall', 'Staff Road', 'Star Kabab', 'StarKabab', 'Station Road', 'Sura Bari', 'Tajmahal Road', 'Taltola', 'Talttola', 'Tangail', 'Technical', 'Tongi', 'Uttar Badda', 'UttarBadda', 'Uttara', 'Uttara House Building', 'Vashantek', 'Vulta', 'Wireless', 'Zia Uddyan', 'Zirabo', 'Zirani Bazar'];
+    // Function to populate auto-suggestions
+    function populateSuggestions(input, suggestionsContainer) {
+      suggestionsContainer.innerHTML = '';
+      const inputValue = input.value.toLowerCase();
+      const filteredStations = stations.filter(station => station.toLowerCase().startsWith(inputValue));
+      filteredStations.forEach(station => {
+        const suggestion = document.createElement('div');
+        suggestion.textContent = station;
+        suggestion.classList.add('suggestion');
+        suggestion.addEventListener('click', () => {
+          input.value = station;
+          suggestionsContainer.innerHTML = '';
+        });
+        suggestionsContainer.appendChild(suggestion);
+      });
+      suggestionsContainer.style.display = filteredStations.length > 0 ? 'block' : 'none';
+    }
+
+    // Function to find route
+    function findRoute() {
+      var startStation = document.getElementById('startStation').value;
+      var endStation = document.getElementById('endStation').value;
+
+      fetch('/find-route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ startStation: startStation, endStation: endStation })
+      })
+      .then(response => response.json())
+      .then(data => {
+        var routeInfo = document.getElementById('routeInfo');
+        routeInfo.innerHTML = '';
+
+        if (data.success) {
+          if (data.routes.length > 0) {
+            data.routes.forEach(function(routeObj) {
+              var routeDetails = document.createElement('div');
+              routeDetails.classList.add('route-details');
+              var busName = document.createElement('h3');
+              busName.textContent = "Bus Name: " + routeObj.busName;
+              routeDetails.appendChild(busName);
+
+              var routeList = document.createElement('ul');
+              routeObj.route.forEach(function(station) {
+                var routeItem = document.createElement('li');
+                routeItem.textContent = station;
+                routeList.appendChild(routeItem);
+              });
+              routeDetails.appendChild(routeList);
+              routeInfo.appendChild(routeDetails);
+            });
+            routeInfo.style.display = 'block';
+          } else {
+            var errorMessage = document.createElement('p');
+            errorMessage.textContent = "No routes found.";
+            routeInfo.appendChild(errorMessage);
+            routeInfo.style.display = 'block';
+          }
+        } else {
+          var errorMessage = document.createElement('p');
+          errorMessage.textContent = data.message;
+          routeInfo.appendChild(errorMessage);
+          routeInfo.style.display = 'block';
+        }
+      })
+      .catch(error => {
+        console.error('Error finding route:', error);
+      });
+    }
+
+    // Get input elements and suggestions containers
+    const startInput = document.getElementById('startStation');
+    const startSuggestions = document.getElementById('startSuggestions');
+    const endInput = document.getElementById('endStation');
+    const endSuggestions = document.getElementById('endSuggestions');
+
+    // Event listeners for input fields
+    startInput.addEventListener('input', () => {
+      populateSuggestions(startInput, startSuggestions);
+    });
+
+    endInput.addEventListener('input', () => {
+      populateSuggestions(endInput, endSuggestions);
+    });
+
+    // Close suggestions when clicking outside the input fields
+    document.addEventListener('click', (event) => {
+      if (!event.target.matches('#startStation') && !event.target.matches('#startSuggestions')) {
+        startSuggestions.innerHTML = '';
+      }
+      if (!event.target.matches('#endStation') && !event.target.matches('#endSuggestions')) {
+        endSuggestions.innerHTML = '';
+      }
+    });
+</script>
+
+</body>
+</html>
+
