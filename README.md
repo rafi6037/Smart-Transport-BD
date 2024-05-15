@@ -5,8 +5,7 @@ The project aims to utilize modern technologies to optimize and enhance transpor
 
 Author:
 ------
-Syed Sabbir Ahmed Rafi.
---
+Syed Sabbir Ahmed Rafi.<br>
 Daffodil International University.
 --
 ahmed15-6037@diu.edu.bd.
